@@ -1,0 +1,14 @@
+apiVersion: v2
+name: simple-grocery-store
+description: A Helm chart for Simple Grocery Store microservice application with external CosmosDB
+type: application
+version: 0.1.0
+appVersion: "1.0.0"
+keywords:
+  - grocery
+  - microservice
+  - react
+  - nodejs
+  - cosmosdb
+maintainers:
+  - name: Simple Grocery Store Team

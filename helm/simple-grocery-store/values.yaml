@@ -1,0 +1,220 @@
+# Default values for simple-grocery-store
+# This is a YAML-formatted file.
+
+# Global settings
+global:
+  imageRegistry: ""
+  imagePullSecrets: []
+
+# ServiceAccount and security options applied to pods/containers
+serviceAccount:
+  create: true
+  # if empty, chart will generate a name per-component
+  name: ""
+
+
+# Backend configuration
+backend:
+  # This section will be removed
+  name: backend
+  image:
+    repository: simple-grocery-store/backend
+    tag: "latest"
+    pullPolicy: IfNotPresent
+  
+  replicaCount: 1
+  
+  service:
+    type: ClusterIP
+    port: 4000
+    targetPort: 4000
+    name: backend-service
+  
+  deployment:
+    name: backend-deployment
+  
+  env:
+    NODE_ENV: production
+    MONGODB_URI: "" # Set this to your CosmosDB connection string
+  # This section will be removed
+  # Secret config: control whether Helm creates a Kubernetes Secret with the
+  # Mongo/Cosmos URI. If false, you must provide the secret yourself.
+  secret:
+    create: true
+    name: backend-secrets
+  
+  resources:
+    limits:
+      cpu: 500m
+      memory: 512Mi
+    requests:
+      cpu: 250m
+      memory: 256Mi
+  
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}
+  # This section will be removed
+  # Pod & container security defaults - safe, sensible defaults for non-root
+  podSecurityContext:
+    enabled: true
+    runAsUser: 1000
+    runAsGroup: 3000
+    fsGroup: 2000
+  containerSecurityContext:
+    enabled: true
+    runAsNonRoot: true
+    allowPrivilegeEscalation: false
+    readOnlyRootFilesystem: false
+    # capabilities to drop by default
+    dropCapabilities:
+      - ALL
+    # This section will be removed
+# Product service configuration
+productService:
+  name: product-service
+  image:
+    repository: simple-grocery-store/product-service
+    tag: "latest"
+    pullPolicy: IfNotPresent
+
+  replicaCount: 1
+
+  service:
+    type: ClusterIP
+    port: 5001
+    targetPort: 5001
+    name: product-service
+
+  deployment:
+    name: product-deployment
+
+  env:
+    NODE_ENV: production
+    MONGODB_URI: "" # Set this to your CosmosDB connection string for products
+
+  secret:
+    create: true
+    name: product-secrets
+
+  resources:
+    limits:
+      cpu: 500m
+      memory: 512Mi
+    requests:
+      cpu: 250m
+      memory: 256Mi
+
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}
+
+  podSecurityContext:
+    enabled: true
+    runAsUser: 1000
+    runAsGroup: 3000
+    fsGroup: 2000
+  containerSecurityContext:
+    enabled: true
+    runAsNonRoot: true
+    allowPrivilegeEscalation: false
+    readOnlyRootFilesystem: false
+    dropCapabilities:
+      - ALL
+
+# Cart service configuration
+cartService:
+  name: cart-service
+  image:
+    repository: simple-grocery-store/cart-service
+    tag: "latest"
+    pullPolicy: IfNotPresent
+
+  replicaCount: 1
+
+  service:
+    type: ClusterIP
+    port: 5002
+    targetPort: 5002
+    name: cart-service
+
+  deployment:
+    name: cart-deployment
+
+  env:
+    NODE_ENV: production
+
+  resources:
+    limits:
+      cpu: 300m
+      memory: 256Mi
+    requests:
+      cpu: 150m
+      memory: 128Mi
+
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}
+
+  podSecurityContext:
+    enabled: true
+    runAsUser: 1000
+    runAsGroup: 3000
+    fsGroup: 2000
+  containerSecurityContext:
+    enabled: true
+    runAsNonRoot: true
+    allowPrivilegeEscalation: false
+    readOnlyRootFilesystem: false
+    dropCapabilities:
+      - ALL
+
+# Frontend configuration
+frontend:
+  name: frontend
+  image:
+    repository: simple-grocery-store/frontend
+    tag: "latest"
+    pullPolicy: IfNotPresent
+  
+  replicaCount: 1
+  
+  service:
+    type: ClusterIP
+    port: 80
+    targetPort: 80
+    name: frontend-service
+  
+  deployment:
+    name: frontend-deployment
+  
+  resources:
+    limits:
+      cpu: 200m
+      memory: 256Mi
+    requests:
+      cpu: 100m
+      memory: 128Mi
+  
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}
+  podSecurityContext:
+    enabled: true
+    runAsUser: 1000
+    runAsGroup: 3000
+    fsGroup: 2000
+  containerSecurityContext:
+    enabled: true
+    runAsNonRoot: true
+    allowPrivilegeEscalation: false
+    readOnlyRootFilesystem: false
+    dropCapabilities:
+      - ALL
+
+# Common labels
+commonLabels:
+  app.kubernetes.io/name: simple-grocery-store
+  app.kubernetes.io/instance: simple-grocery-store
+  app.kubernetes.io/version: "1.0.0"
+  app.kubernetes.io/managed-by: Helm
