@@ -13,7 +13,7 @@ app.use(cors());
 app.use(express.json());
 
 const PORT = process.env.PORT || 5001;
-const MONGO_URI = process.env.MONGO_URI || '';
+const MONGO_URI = process.env.MONGO_URI || 'MONGO_URI=mongodb://admin:Password1@localhost:27017/products?authSource=admin';
 
 async function start() {
   if (MONGO_URI && MONGO_URI.trim() !== '') {
