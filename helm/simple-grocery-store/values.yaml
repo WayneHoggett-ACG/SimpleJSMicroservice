@@ -12,64 +12,6 @@ serviceAccount:
   # if empty, chart will generate a name per-component
   name: ""
 
-
-# Backend configuration
-backend:
-  # This section will be removed
-  name: backend
-  image:
-    repository: simple-grocery-store/backend
-    tag: "latest"
-    pullPolicy: IfNotPresent
-  
-  replicaCount: 1
-  
-  service:
-    type: ClusterIP
-    port: 4000
-    targetPort: 4000
-    name: backend-service
-  
-  deployment:
-    name: backend-deployment
-  
-  env:
-    NODE_ENV: production
-    MONGODB_URI: "" # Set this to your CosmosDB connection string
-  # This section will be removed
-  # Secret config: control whether Helm creates a Kubernetes Secret with the
-  # Mongo/Cosmos URI. If false, you must provide the secret yourself.
-  secret:
-    create: true
-    name: backend-secrets
-  
-  resources:
-    limits:
-      cpu: 500m
-      memory: 512Mi
-    requests:
-      cpu: 250m
-      memory: 256Mi
-  
-  nodeSelector: {}
-  tolerations: []
-  affinity: {}
-  # This section will be removed
-  # Pod & container security defaults - safe, sensible defaults for non-root
-  podSecurityContext:
-    enabled: true
-    runAsUser: 1000
-    runAsGroup: 3000
-    fsGroup: 2000
-  containerSecurityContext:
-    enabled: true
-    runAsNonRoot: true
-    allowPrivilegeEscalation: false
-    readOnlyRootFilesystem: false
-    # capabilities to drop by default
-    dropCapabilities:
-      - ALL
-    # This section will be removed
 # Product service configuration
 productService:
   name: product-service
