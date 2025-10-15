@@ -63,8 +63,10 @@ function ProductsPage({ products, featured, otherProducts, categories, sort, set
           <div className="d-flex mb-3 gap-2">
             <select className="form-select w-auto" value={sort} onChange={e => setSort(e.target.value)}>
               <option value="">Sort by...</option>
-              <option value="name">Alphabetical</option>
-              <option value="price">Price</option>
+              <option value="name_asc">Name (A-Z)</option>
+              <option value="name_desc">Name (Z-A)</option>
+              <option value="price_asc">Price (Low to High)</option>
+              <option value="price_desc">Price (High to Low)</option>
             </select>
             <select className="form-select w-auto" value={category} onChange={e => setCategory(e.target.value)}>
               <option value="">All Categories</option>
@@ -162,29 +164,33 @@ function App() {
   };
 
   useEffect(() => {
-    // Always fetch all products to get all categories
-    fetch('/api/products')
+    // Fetch products with current sort and category
+    const params = new URLSearchParams();
+    if (sort) params.append('sort', sort);
+    if (category) params.append('category', category);
+    const query = params.toString();
+    const url = query ? `/api/products?${query}` : '/api/products';
+    
+    fetch(url)
       .then(res => res.json())
       .then(data => {
         setProducts(data);
-        setCategories([...new Set(data.map(p => p.category))]);
+        // Only update categories if we don't have them yet (to avoid losing them on sort/filter)
+        if (categories.length === 0) {
+          setCategories([...new Set(data.map(p => p.category))]);
+        }
       });
-  }, []);
+  }, [sort, category]);
 
   const featured = products.find(p => p.discount > 0);
   
-  // Filter and sort products on the frontend
+  // Filter products on the frontend (only by category if needed, since API handles sorting)
   let filteredProducts = products;
   if (category) {
     console.log('Filtering by category:', category);
     console.log('All products:', products.map(p => ({ name: p.name, category: p.category })));
     filteredProducts = filteredProducts.filter(p => p.category === category);
     console.log('Filtered products:', filteredProducts.map(p => ({ name: p.name, category: p.category })));
-  }
-  if (sort === 'name') {
-    filteredProducts = filteredProducts.sort((a, b) => a.name.localeCompare(b.name));
-  } else if (sort === 'price') {
-    filteredProducts = filteredProducts.sort((a, b) => a.price - b.price);
   }
   
   // For the products page, include all filtered products (including featured)

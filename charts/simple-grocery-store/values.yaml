@@ -4,13 +4,6 @@
 # Global settings
 global:
   imageRegistry: ""
-  imagePullSecrets: []
-
-# ServiceAccount and security options applied to pods/containers
-serviceAccount:
-  create: true
-  # if empty, chart will generate a name per-component
-  name: ""
 
 # Product service configuration
 productService:

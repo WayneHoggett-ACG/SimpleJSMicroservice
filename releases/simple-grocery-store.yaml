@@ -1,0 +1,15 @@
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: simple-grocery-store
+  namespace: dev
+spec:
+  interval: 10m
+  chart:
+    spec:
+      chart: ../charts/simple-grocery-store
+      sourceRef:
+        kind: GitRepository
+        name: flux-system
+  values:
+    imageRegistry: 

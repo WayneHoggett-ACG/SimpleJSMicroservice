@@ -53,14 +53,10 @@ The chart is highly configurable via `values.yaml`. Key sections:
 - `frontend.resources`: CPU/memory limits and requests
 - `frontend.replicaCount`: Number of replicas
 
-### Security
-- `serviceAccount.name`: Custom ServiceAccount name (optional)
-- Pod and container security contexts are applied by default (non-root, no privilege escalation, dropped capabilities)
-
 ## Usage Notes
 
 - **MongoDB**: If `productService.secret.create` is `true`, the chart creates a Secret with `mongodb-uri`. For production, set to `false` and manage the Secret externally.
-- **Security**: The chart enforces security best practices with non-root containers, resource limits, and ServiceAccount usage.
+- **Security**: The chart enforces security best practices with non-root containers, resource limits.
 - **Scaling**: Adjust `replicaCount` for each service. Consider using an Ingress for external access.
 - **Development**: For local development, you can override image tags to use local builds.
 

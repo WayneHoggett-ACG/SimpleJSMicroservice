@@ -20,7 +20,6 @@ spec:
         app.kubernetes.io/name: {{ .Chart.Name }}
         app.kubernetes.io/instance: {{ .Release.Name }}
     spec:
-      serviceAccountName: {{ if .Values.serviceAccount.name }}{{ .Values.serviceAccount.name }}{{ else }}{{ .Release.Name }}-sa{{ end }}
       {{- if .Values.productService.podSecurityContext.enabled }}
       securityContext:
         runAsUser: {{ .Values.productService.podSecurityContext.runAsUser }}

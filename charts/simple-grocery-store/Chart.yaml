@@ -1,6 +1,6 @@
 apiVersion: v2
 name: simple-grocery-store
-description: A Helm chart for Simple Grocery Store microservice application with external CosmosDB
+description: A Helm chart for Simple Grocery Store microservice application with an optional external CosmosDB
 type: application
 version: 0.1.0
 appVersion: "1.0.0"

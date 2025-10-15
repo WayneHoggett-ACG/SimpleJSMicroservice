@@ -18,8 +18,8 @@ export async function insertMany(docs) {
   if (useMongo) {
     return Product.insertMany(docs);
   }
-  // clone and push
-  const cloned = docs.map(d => ({ ...d }));
+  // clone and add _id for in-memory
+  const cloned = docs.map(d => ({ ...d, _id: Math.random().toString(36).substr(2, 9) }));
   inMemory.push(...cloned);
   return cloned;
 }
@@ -27,8 +27,15 @@ export async function insertMany(docs) {
 export async function find(filter = {}, sort = null) {
   if (useMongo) {
     let q = Product.find(filter).lean();
-    if (sort === 'price') q = q.sort({ price: 1 });
-    else if (sort === 'name') q = q.sort({ name: 1 });
+    if (sort) {
+      const [field, direction] = sort.split('_');
+      const sortOrder = direction === 'desc' ? -1 : 1;
+      if (field === 'price') {
+        q = q.sort({ price: sortOrder });
+      } else if (field === 'name') {
+        q = q.sort({ name: sortOrder });
+      }
+    }
     return q.exec();
   }
   // in-memory filter & sort
@@ -38,8 +45,14 @@ export async function find(filter = {}, sort = null) {
     }
     return true;
   });
-  if (sort === 'price') results = results.sort((a, b) => a.price - b.price);
-  else if (sort === 'name') results = results.sort((a, b) => a.name.localeCompare(b.name));
+  if (sort) {
+    const [field, direction] = sort.split('_');
+    if (field === 'price') {
+      results = results.sort((a, b) => direction === 'desc' ? b.price - a.price : a.price - b.price);
+    } else if (field === 'name') {
+      results = results.sort((a, b) => direction === 'desc' ? b.name.localeCompare(a.name) : a.name.localeCompare(b.name));
+    }
+  }
   return results;
 }
 
