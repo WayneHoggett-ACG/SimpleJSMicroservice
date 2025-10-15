@@ -10,6 +10,7 @@ spec:
       chart: ../charts/simple-grocery-store
       sourceRef:
         kind: GitRepository
-        name: flux-system
+        name: simple-grocery-store
+        namespace: flux-system
   values:
     imageRegistry: "cr25taer4loyy2s.azurecr.io"
