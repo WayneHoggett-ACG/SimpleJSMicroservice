@@ -12,4 +12,4 @@ spec:
         kind: GitRepository
         name: flux-system
   values:
-    imageRegistry: 
+    imageRegistry: "cr25taer4loyy2s.azurecr.io"
