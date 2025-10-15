@@ -14,4 +14,5 @@ spec:
         name: simple-grocery-store
         namespace: flux-system
   values:
-    global.imageRegistry: "cra3jqzetmyrkoo.azurecr.io"
+    global:
+      imageRegistry: "cra3jqzetmyrkoo.azurecr.io"
