@@ -11,9 +11,6 @@ jobs:
       id-token: write # Required write permission to Fetch an OIDC token
       contents: read # Read permission to access the repository contents
     runs-on: ubuntu-latest
-    env:
-      POLL_INTERVAL: 60 # Number of times to poll for an updated image in seconds
-      MAX_ATTEMPTS: 10 # Number attempts to wait for an image update, should be greater than Flux poll interval
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
@@ -45,6 +42,9 @@ jobs:
       contents: write # Write permission to access the repository contents
     runs-on: ubuntu-latest
     environment: staging
+    env:
+      POLL_INTERVAL: 60 # Number of times to poll for an updated image in seconds
+      MAX_ATTEMPTS: 10 # Number attempts to wait for an image update, should be greater than Flux poll interval
     steps:
     
     - name: Checkout code
