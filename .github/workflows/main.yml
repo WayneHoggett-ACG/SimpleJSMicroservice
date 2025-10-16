@@ -147,7 +147,7 @@ jobs:
         
     - name: Kubectl tool installer
       uses: Azure/setup-kubectl@v4.0.0
-
+      
     - name: Configure AKS Credentials
       run: |
           RG=$(az group list --query [].name --output tsv)
