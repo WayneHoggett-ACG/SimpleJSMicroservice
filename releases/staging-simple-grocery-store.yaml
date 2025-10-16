@@ -18,10 +18,10 @@ spec:
       imageRegistry: "crv7xod45xpq3fs.azurecr.io" # To be provided
     frontend:
       image:
-        tag: 6
+        tag: 7
     cartService:
       image:
-        tag: 6
+        tag: 7
     productService:
       image:
-        tag: 6
+        tag: 7
