@@ -52,9 +52,9 @@ jobs:
 
     - name: Update Helm Release tags
       run: |
-        sed -E "/frontend:/,/tag:/ s/(tag: ).*/\1${GITHUB_RUN_NUMBER}/" -i releases/simple-grocery-store.yaml
-        sed -E "/cartService:/,/tag:/ s/(tag: ).*/\1${GITHUB_RUN_NUMBER}/" -i releases/simple-grocery-store.yaml
-        sed -E "/productService:/,/tag:/ s/(tag: ).*/\1${GITHUB_RUN_NUMBER}/" -i releases/simple-grocery-store.yaml
+        sed -E "/frontend:/,/tag:/ s/(tag: ).*/\1${GITHUB_RUN_NUMBER}/" -i releases/prod-simple-grocery-store.yaml
+        sed -E "/cartService:/,/tag:/ s/(tag: ).*/\1${GITHUB_RUN_NUMBER}/" -i releases/prod-simple-grocery-store.yaml
+        sed -E "/productService:/,/tag:/ s/(tag: ).*/\1${GITHUB_RUN_NUMBER}/" -i releases/prod-simple-grocery-store.yaml
         git config --global user.name "GitHub Action"
         git config --global user.email "action@github.com"
         git add releases/simple-grocery-store.yaml
