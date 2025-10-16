@@ -57,7 +57,7 @@ jobs:
         sed -E "/productService:/,/tag:/ s/(tag: ).*/\1${GITHUB_RUN_NUMBER}/" -i releases/staging-simple-grocery-store.yaml
         git config --global user.name "GitHub Action"
         git config --global user.email "action@github.com"
-        git add releases/simple-grocery-store.yaml
+        git add releases/staging-simple-grocery-store.yaml
         git commit -m "Update HelmRelease image tags to ${GITHUB_RUN_NUMBER}"
         git push
         
@@ -139,6 +139,6 @@ jobs:
         sed -E "/productService:/,/tag:/ s/(tag: ).*/\1${GITHUB_RUN_NUMBER}/" -i releases/prod-simple-grocery-store.yaml
         git config --global user.name "GitHub Action"
         git config --global user.email "action@github.com"
-        git add releases/simple-grocery-store.yaml
+        git add releases/prod-simple-grocery-store.yaml
         git commit -m "Update HelmRelease image tags to ${GITHUB_RUN_NUMBER}"
         git push
