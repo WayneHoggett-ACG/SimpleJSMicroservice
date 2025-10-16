@@ -24,12 +24,6 @@ spec:
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- if .Values.frontend.podSecurityContext.enabled }}
-      securityContext:
-        runAsUser: {{ .Values.frontend.podSecurityContext.runAsUser }}
-        runAsGroup: {{ .Values.frontend.podSecurityContext.runAsGroup }}
-        fsGroup: {{ .Values.frontend.podSecurityContext.fsGroup }}
-      {{- end }}
       containers:
       - name: {{ .Values.frontend.name }}
         image: "{{ .Values.global.imageRegistry }}{{ .Values.frontend.image.repository }}:{{ .Values.frontend.image.tag }}"
@@ -56,15 +50,6 @@ spec:
           failureThreshold: 3
         resources:
           {{- toYaml .Values.frontend.resources | nindent 10 }}
-        {{- if .Values.frontend.containerSecurityContext.enabled }}
-        securityContext:
-          runAsNonRoot: {{ .Values.frontend.containerSecurityContext.runAsNonRoot }}
-          allowPrivilegeEscalation: {{ .Values.frontend.containerSecurityContext.allowPrivilegeEscalation }}
-          readOnlyRootFilesystem: {{ .Values.frontend.containerSecurityContext.readOnlyRootFilesystem }}
-          capabilities:
-            drop:
-            {{- toYaml .Values.frontend.containerSecurityContext.dropCapabilities | nindent 12 }}
-        {{- end }}
       {{- with .Values.frontend.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}

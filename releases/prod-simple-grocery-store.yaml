@@ -4,8 +4,8 @@ metadata:
   name: simple-grocery-store
   namespace: flux-system  # Using GitRepository in flux-system
 spec:
-  targetNamespace: dev  # Installing to dev
-  interval: 5m # Check for updates every 5 minutes
+  targetNamespace: production  # Installing to staging
+  interval: 1m # Check for updates every 5 minutes
   chart:
     spec:
       chart: ./charts/simple-grocery-store # Path relative to GitRepository root
@@ -15,4 +15,13 @@ spec:
         namespace: flux-system
   values:
     global:
-      imageRegistry: "cra3jqzetmyrkoo.azurecr.io"
+      imageRegistry: "" # To be provided
+    frontend:
+      image:
+        tag: latest
+    cartService:
+      image:
+        tag: latest
+    productService:
+      image:
+        tag: latest

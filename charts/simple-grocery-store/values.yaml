@@ -9,7 +9,7 @@ global:
 productService:
   name: product-service
   image:
-    repository: simple-grocery-store/product-service
+    repository: product-service
     tag: "latest"
     pullPolicy: IfNotPresent
 
@@ -61,7 +61,7 @@ productService:
 cartService:
   name: cart-service
   image:
-    repository: simple-grocery-store/cart-service
+    repository: cart-service
     tag: "latest"
     pullPolicy: IfNotPresent
 
@@ -108,14 +108,14 @@ cartService:
 frontend:
   name: frontend
   image:
-    repository: simple-grocery-store/frontend
+    repository: frontend
     tag: "latest"
     pullPolicy: IfNotPresent
   
   replicaCount: 1
   
   service:
-    type: ClusterIP
+    type: LoadBalancer
     port: 80
     targetPort: 80
     name: frontend-service
@@ -135,7 +135,7 @@ frontend:
   tolerations: []
   affinity: {}
   podSecurityContext:
-    enabled: true
+    enabled: false
     runAsUser: 1000
     runAsGroup: 3000
     fsGroup: 2000
