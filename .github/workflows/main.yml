@@ -46,21 +46,7 @@ jobs:
       POLL_INTERVAL: 60 # Number of times to poll for an updated image in seconds
       MAX_ATTEMPTS: 10 # Number attempts to wait for an image update, should be greater than Flux poll interval
     steps:
-    
-    - name: Checkout code
-      uses: actions/checkout@v4
 
-    - name: Update Helm Release tags
-      run: |
-        sed -E "/frontend:/,/tag:/ s/(tag: ).*/\1${GITHUB_RUN_NUMBER}/" -i releases/staging-simple-grocery-store.yaml
-        sed -E "/cartService:/,/tag:/ s/(tag: ).*/\1${GITHUB_RUN_NUMBER}/" -i releases/staging-simple-grocery-store.yaml
-        sed -E "/productService:/,/tag:/ s/(tag: ).*/\1${GITHUB_RUN_NUMBER}/" -i releases/staging-simple-grocery-store.yaml
-        git config --global user.name "GitHub Action"
-        git config --global user.email "action@github.com"
-        git add releases/staging-simple-grocery-store.yaml
-        git commit -m "Update HelmRelease image tags to ${GITHUB_RUN_NUMBER}"
-        git push
-        
     - name: Azure login
       uses: azure/login@v2
       with:
@@ -76,6 +62,29 @@ jobs:
           RG=$(az group list --query [].name --output tsv)
           AKS=$(az aks list --resource-group $RG --query [].name --output tsv)
           az aks get-credentials --resource-group $RG --name $AKS --overwrite-existing
+    
+    - name: Create staging namespace if it doesn't exist
+      run: |
+          if ! kubectl get namespace staging >/dev/null 2>&1; then
+            echo "Namespace 'staging' not found. Creating..."
+            kubectl create namespace staging
+          else
+            echo "Namespace 'staging' exists."
+          fi
+    
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Update Helm Release tags
+      run: |
+        sed -E "/frontend:/,/tag:/ s/(tag: ).*/\1${GITHUB_RUN_NUMBER}/" -i releases/staging-simple-grocery-store.yaml
+        sed -E "/cartService:/,/tag:/ s/(tag: ).*/\1${GITHUB_RUN_NUMBER}/" -i releases/staging-simple-grocery-store.yaml
+        sed -E "/productService:/,/tag:/ s/(tag: ).*/\1${GITHUB_RUN_NUMBER}/" -i releases/staging-simple-grocery-store.yaml
+        git config --global user.name "GitHub Action"
+        git config --global user.email "action@github.com"
+        git add releases/staging-simple-grocery-store.yaml
+        git commit -m "Update HelmRelease image tags to ${GITHUB_RUN_NUMBER}"
+        git push
 
     - name: Wait for Image Tag to Match Run Number
       run: |
@@ -129,6 +138,31 @@ jobs:
     runs-on: ubuntu-latest
     environment: production
     steps:
+    - name: Azure login
+      uses: azure/login@v2
+      with:
+        client-id: ${{ secrets.AZURE_CLIENT_ID }}
+        tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+        subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+        
+    - name: Kubectl tool installer
+      uses: Azure/setup-kubectl@v4.0.0
+
+    - name: Configure AKS Credentials
+      run: |
+          RG=$(az group list --query [].name --output tsv)
+          AKS=$(az aks list --resource-group $RG --query [].name --output tsv)
+          az aks get-credentials --resource-group $RG --name $AKS --overwrite-existing
+    
+    - name: Create production namespace if it doesn't exist
+      run: |
+          if ! kubectl get namespace production >/dev/null 2>&1; then
+            echo "Namespace 'production' not found. Creating..."
+            kubectl create namespace production
+          else
+            echo "Namespace 'production' exists."
+          fi
+
     - name: Checkout code
       uses: actions/checkout@v4
       
