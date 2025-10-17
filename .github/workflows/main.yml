@@ -170,11 +170,13 @@ jobs:
       
     - name: Update Helm Release tags
       run: |
+        git config --global user.name "GitHub Action"
+        git config --global user.email "action@github.com"
+        git fetch origin main
+        git pull --rebase origin main
         sed -E "/frontend:/,/tag:/ s/(tag: ).*/\1${GITHUB_RUN_NUMBER}/" -i releases/prod-simple-grocery-store.yaml
         sed -E "/cartService:/,/tag:/ s/(tag: ).*/\1${GITHUB_RUN_NUMBER}/" -i releases/prod-simple-grocery-store.yaml
         sed -E "/productService:/,/tag:/ s/(tag: ).*/\1${GITHUB_RUN_NUMBER}/" -i releases/prod-simple-grocery-store.yaml
-        git config --global user.name "GitHub Action"
-        git config --global user.email "action@github.com"
         git add releases/prod-simple-grocery-store.yaml
         git commit -m "Update HelmRelease image tags to ${GITHUB_RUN_NUMBER}"
         git push
