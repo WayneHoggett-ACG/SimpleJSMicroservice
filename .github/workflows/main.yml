@@ -121,7 +121,7 @@ jobs:
           fi
           echo "IP retrieved: $IP"
           echo "ip=$IP" >> $GITHUB_OUTPUT
-          TARGET_URL="https//$IP"  # Adjust protocol/port as needed (e.g., http if not HTTP)
+          TARGET_URL="http://$IP"  # Adjust protocol/port as needed (e.g., http if not HTTP)
           echo "target_url=$TARGET_URL" >> $GITHUB_OUTPUT
           
     - name: ZAP Scan
