@@ -44,7 +44,7 @@ jobs:
     environment: staging
     env:
       POLL_INTERVAL: 60 # Number of times to poll for an updated image in seconds
-      MAX_ATTEMPTS: 10 # Number attempts to wait for an image update, should be greater than Flux poll interval
+      MAX_ATTEMPTS: 20 # Number attempts to wait for an image update, should be greater than Flux poll interval
     steps:
 
     - name: Azure login
@@ -129,7 +129,7 @@ jobs:
       uses: zaproxy/action-baseline@v0.14.0
       with:
         target: ${{ steps.get-ip.outputs.target_url }}
-        
+
   release-and-test-production:
     needs: release-and-test-staging
     permissions:
