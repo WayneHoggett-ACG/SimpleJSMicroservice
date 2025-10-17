@@ -135,6 +135,7 @@ jobs:
     permissions:
       id-token: write # Required write permission to Fetch an OIDC token
       contents: write # Write permission to access the repository contents
+      issues: write # Write permission to access the repository issues
     runs-on: ubuntu-latest
     environment: production
     steps:
