@@ -15,7 +15,7 @@ spec:
         namespace: flux-system
   values:
     global:
-      imageRegistry: "crv7xod45xpq3fs.azurecr.io" # To be provided
+      imageRegistry: "crv7xod45xpq3fs.azurecr.io/" # To be provided - must include trailing slash
     frontend:
       image:
         tag: latest

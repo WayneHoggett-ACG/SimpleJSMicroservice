@@ -128,7 +128,7 @@ jobs:
       if: steps.get-ip.outputs.ip != ''
       uses: zaproxy/action-baseline@v0.14.0
       with:
-        target: ${{ steps.get-ip.outputs.target_url }}
+        target: http://${{ steps.get-ip.outputs.target_url }}
         
   release-and-test-production:
     needs: release-and-test-staging
