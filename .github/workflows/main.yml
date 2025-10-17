@@ -128,6 +128,7 @@ jobs:
       if: steps.get-ip.outputs.ip != ''
       uses: zaproxy/action-baseline@v0.14.0
       with:
+        token: ${{ secrets.GITHUB_TOKEN }}
         target: ${{ steps.get-ip.outputs.target_url }}
 
   release-and-test-production:
