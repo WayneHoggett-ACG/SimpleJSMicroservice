@@ -40,6 +40,7 @@ jobs:
     permissions:
       id-token: write # Required write permission to Fetch an OIDC token
       contents: write # Write permission to access the repository contents
+      issues: write # Write permission to access the repository issues
     runs-on: ubuntu-latest
     environment: staging
     env:
@@ -131,12 +132,11 @@ jobs:
         token: ${{ secrets.GITHUB_TOKEN }}
         target: ${{ steps.get-ip.outputs.target_url }}
 
-  release-and-test-production:
+  release-production:
     needs: release-and-test-staging
     permissions:
       id-token: write # Required write permission to Fetch an OIDC token
       contents: write # Write permission to access the repository contents
-      issues: write # Write permission to access the repository issues
     runs-on: ubuntu-latest
     environment: production
     steps:
