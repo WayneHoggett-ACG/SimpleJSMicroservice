@@ -121,14 +121,14 @@ jobs:
           fi
           echo "IP retrieved: $IP"
           echo "ip=$IP" >> $GITHUB_OUTPUT
-          TARGET_URL="https://$IP"  # Adjust protocol/port as needed (e.g., http if not HTTPS)
+          TARGET_URL="https//$IP"  # Adjust protocol/port as needed (e.g., http if not HTTP)
           echo "target_url=$TARGET_URL" >> $GITHUB_OUTPUT
           
     - name: ZAP Scan
       if: steps.get-ip.outputs.ip != ''
       uses: zaproxy/action-baseline@v0.14.0
       with:
-        target: "${{ format('http://{0}', steps.get-ip.outputs.target_url) }}"
+        target: steps.get-ip.outputs.target_url
         
   release-and-test-production:
     needs: release-and-test-staging
