@@ -18,10 +18,10 @@ spec:
       imageRegistry: "crv7xod45xpq3fs.azurecr.io/" # To be provided - must include trailing slash
     frontend:
       image:
-        tag: 18
+        tag: 19
     cartService:
       image:
-        tag: 18
+        tag: 19
     productService:
       image:
-        tag: 18
+        tag: 19
