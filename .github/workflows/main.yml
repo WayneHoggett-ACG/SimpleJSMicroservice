@@ -40,7 +40,7 @@ jobs:
           cd ../product-service
           az acr build --registry "$ACR" --image "product-service:${GITHUB_RUN_NUMBER}" .
           USER_NAME="00000000-0000-0000-0000-000000000000"
-          PASSWORD=$(az acr login --name $ACR_NAME --expose-token --output tsv --query accessToken)
+          PASSWORD=$(az acr login --name $ACR --expose-token --output tsv --query accessToken)
           helm registry login $ACR.azurecr.io --username $USER_NAME --password $PASSWORD
           cd ../../charts/simple-grocery-store
           # Need to patch in the image versions here
