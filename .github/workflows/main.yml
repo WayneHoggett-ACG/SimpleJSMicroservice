@@ -12,11 +12,11 @@ jobs:
       contents: read # Read permission to access the repository contents
     runs-on: ubuntu-latest
     steps:
-    - name: Helm tool installer
-      uses: Azure/setup-helm@v3
-          
     - name: Checkout code
       uses: actions/checkout@v4
+      
+    - name: Helm tool installer
+      uses: Azure/setup-helm@v4.3.1
     
     - name: Azure login
       uses: azure/login@v2
@@ -46,4 +46,4 @@ jobs:
           # Need to patch in the image versions here
           helm package .
           FILE_NAME=$(ls *.tgz)
-          helm push $FILE_NAME oci://$ACR_NAME.azurecr.io/helm
+          helm push $FILE_NAME oci://$ACR.azurecr.io/helm
