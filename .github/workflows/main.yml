@@ -1,0 +1,49 @@
+name: Build and Release
+on:
+  push:
+    branches: [ main ]
+    paths-ignore:
+      - 'releases/**'
+
+jobs:
+  build-and-push:
+    permissions:
+      id-token: write # Required write permission to Fetch an OIDC token
+      contents: read # Read permission to access the repository contents
+    runs-on: ubuntu-latest
+    steps:
+    - name: Helm tool installer
+      uses: Azure/setup-helm@v3
+          
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Azure login
+      uses: azure/login@v2
+      with:
+        client-id: ${{ secrets.AZURE_CLIENT_ID }}
+        tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+        subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+    - name: Azure CLI script
+      uses: azure/cli@v2
+      with:
+        azcliversion: latest
+        inlineScript: |
+          # Set required variables
+          RG=$(az group list --query [].name --output tsv)
+          ACR=$(az acr list --resource-group $RG --query [].name --output tsv)
+          cd frontend
+          az acr build --registry "$ACR" --image "frontend:${GITHUB_RUN_NUMBER}" .
+          cd ../services/cart-service
+          az acr build --registry "$ACR" --image "cart-service:${GITHUB_RUN_NUMBER}" .
+          cd ../product-service
+          az acr build --registry "$ACR" --image "product-service:${GITHUB_RUN_NUMBER}" .
+          USER_NAME="00000000-0000-0000-0000-000000000000"
+          PASSWORD=$(az acr login --name $ACR_NAME --expose-token --output tsv --query accessToken)
+          helm registry login $ACR.azurecr.io --username $USER_NAME --password $PASSWORD
+          cd ../../charts/simple-grocery-store
+          # Need to patch in the image versions here
+          helm package .
+          FILE_NAME=$(ls *.tgz)
+          helm push $FILE_NAME oci://$ACR_NAME.azurecr.io/helm
