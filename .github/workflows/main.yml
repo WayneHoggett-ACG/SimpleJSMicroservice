@@ -2,8 +2,6 @@ name: Build and Release
 on:
   push:
     branches: [ main ]
-    paths-ignore:
-      - 'releases/**'
 
 jobs:
   build-and-push:
@@ -29,6 +27,8 @@ jobs:
         inlineScript: |
           # Install Helm
           tdnf install helm -y
+          # Install yq
+          tdnf install yq -y
           # Set required variables
           RG=$(az group list --query [].name --output tsv)
           ACR=$(az acr list --resource-group $RG --query [].name --output tsv)
@@ -42,7 +42,10 @@ jobs:
           PASSWORD=$(az acr login --name $ACR --expose-token --output tsv --query accessToken)
           helm registry login $ACR.azurecr.io --username $USER_NAME --password $PASSWORD
           cd ../../charts/simple-grocery-store
-          # Need to patch in the image versions here
+          # Update image tags
+          yq eval ".frontend.image.tag = \"$GITHUB_RUN_NUMBER\"" -i values.yaml
+          yq eval ".productService.image.tag = \"$GITHUB_RUN_NUMBER\"" -i values.yaml
+          yq eval ".cartService.image.tag = \"$GITHUB_RUN_NUMBER\"" -i values.yaml
           helm package .
           FILE_NAME=$(ls *.tgz)
           helm push $FILE_NAME oci://$ACR.azurecr.io/helm
