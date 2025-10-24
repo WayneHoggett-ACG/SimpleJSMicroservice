@@ -28,7 +28,7 @@ jobs:
         azcliversion: latest
         inlineScript: |
           # Install Helm
-          dnf install helm
+          tdnf install helm
           # Set required variables
           RG=$(az group list --query [].name --output tsv)
           ACR=$(az acr list --resource-group $RG --query [].name --output tsv)
