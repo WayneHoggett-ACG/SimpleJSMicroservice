@@ -17,6 +17,11 @@ jobs:
       
     - name: Helm tool installer
       uses: Azure/setup-helm@v4.3.1
+      id: install
+
+    - name: Check Helm Version
+      run: helm version
+      shell: bash
     
     - name: Azure login
       uses: azure/login@v2
