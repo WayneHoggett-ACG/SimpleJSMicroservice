@@ -1,8 +1,4 @@
-# Default values for simple-grocery-store
-
-# Global settings
-global:
-  imageRegistry: ""
+# Staging values for simple-grocery-store
 
 # Product service configuration
 productService:
