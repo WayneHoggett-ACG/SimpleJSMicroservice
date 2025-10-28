@@ -5,7 +5,7 @@ productService:
   name: product-service
   image:
     repository: product-service
-    tag: "latest"
+    tag: 2
     pullPolicy: IfNotPresent
 
   replicaCount: 1
@@ -57,7 +57,7 @@ cartService:
   name: cart-service
   image:
     repository: cart-service
-    tag: "latest"
+    tag: 2
     pullPolicy: IfNotPresent
 
   replicaCount: 1
@@ -104,7 +104,7 @@ frontend:
   name: frontend
   image:
     repository: frontend
-    tag: "latest"
+    tag: 2
     pullPolicy: IfNotPresent
   
   replicaCount: 1
