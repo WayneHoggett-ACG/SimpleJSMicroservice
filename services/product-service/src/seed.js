@@ -1,4 +1,4 @@
-import { countDocuments, insertMany } from './store.js';
+import { countDocuments, insertMany, getUseMongo } from './store.js';
 
 const sampleProducts = [
   { name: 'Bananas', description: 'Fresh bananas', price: 0.99, image: '/images/bananas.png', category: 'Fruit', discount: 10 },
@@ -10,8 +10,8 @@ const sampleProducts = [
 export async function seedProducts() {
   const count = await countDocuments();
   if (count === 0) {
-    const productsWithImages = sampleProducts.filter(p => p.image && p.image.trim() !== '').map(p => ({ ...p, name: `${p.name} Example` }));
+    const productsWithImages = sampleProducts.filter(p => p.image && p.image.trim() !== '').map(p => getUseMongo() ? p : { ...p, name: `${p.name} Example` });
     await insertMany(productsWithImages);
-    console.log('Product service: Sample products seeded (with images only, names appended with " Example")');
+    console.log(`Product service: Sample products seeded (with images only${getUseMongo() ? '' : ', names appended with " Example"'})`);
   }
 }

@@ -7,6 +7,10 @@ export function setUseMongo(flag) {
   useMongo = !!flag;
 }
 
+export function getUseMongo() {
+  return useMongo;
+}
+
 export async function countDocuments() {
   if (useMongo) {
     return Product.countDocuments();
